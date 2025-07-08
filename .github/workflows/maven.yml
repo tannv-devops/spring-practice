@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -42,7 +42,13 @@ jobs:
           sleep 2
         done
 
-    - name: Build with Maven
+    - name: Set test database config
+      run: |
+        echo "SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/spring_practice" >> $GITHUB_ENV
+        echo "SPRING_DATASOURCE_USERNAME=user" >> $GITHUB_ENV
+        echo "SPRING_DATASOURCE_PASSWORD=password" >> $GITHUB_ENV
+
+    - name: Build and Test with Maven
       run: mvn -B clean verify
 
     - name: Upload Surefire HTML Report
